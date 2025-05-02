@@ -1,11 +1,12 @@
 {
-	"useTabs": true,
-	"tabWidth": 4,
 	"semi": true,
-	"singleQuote": true,
-	"trailingComma": "es5",
+	"tabWidth": 4,
+	"useTabs": true,
+	"plugins": ["@prettier/plugin-php"],
 	"printWidth": 100,
-	"bracketSpacing": true,
+	"singleQuote": true,
 	"arrowParens": "always",
-	"plugins": ["@prettier/plugin-php"]
+	"trailingComma": "all",
+	"bracketSpacing": true,
+	"jsxBracketSameLine": true
 }
