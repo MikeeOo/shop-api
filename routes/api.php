@@ -4,16 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| These routes are loaded by the RouteServiceProvider.
-| All of them will be assigned to the "api" middleware group.
-|
-*/
+// API Routes - prefixed with "/api"
+// Loaded by - "app/Providers/RouteServiceProvider.php" | ->prefix('api') |
+// All of them will be assigned to the "api" middleware group.
 
+// api test route
 Route::get('/', function () {
 	return response()->json([
 		'message' => 'API works!',
