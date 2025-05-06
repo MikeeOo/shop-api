@@ -4,9 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 
-// API Routes - prefixed with "/api"
-// Loaded by - "app/Providers/RouteServiceProvider.php" | ->prefix('api') |
-// All of them will be assigned to the "api" middleware group.
+// "app/Providers/RouteServiceProvider.php"
+// Route::middleware('api')->prefix('api')->group(base_path('routes/api.php'));
 
 // api test route
 Route::get('/', function () {
