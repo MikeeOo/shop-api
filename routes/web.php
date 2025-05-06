@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Web Routes
-// Loaded by - "app/Providers/RouteServiceProvider.php"
-// All of them will be assigned to the "web" middleware group.
+// "app/Providers/RouteServiceProvider.php"
+// 1st - "routes/api.php"
+// 2nd - Route::middleware('web')->group(base_path('routes/web.php'));
 
 Route::get('/web', function () {
 	return 'Web works!';
@@ -13,6 +13,5 @@ Route::get('/web', function () {
 // Catch-all route for the React app
 // This must be the LAST route defined
 Route::get('/{path?}', function () {
-	// Make sure this file exists - it will block API routes otherwise!
-	return file_get_contents(public_path('dist/index.html'));
+	return file_get_contents(public_path('dist/index.html')); // "index.html" doesn't exist == API routes blocked!
 })->where('path', '^(?!api).*$');
