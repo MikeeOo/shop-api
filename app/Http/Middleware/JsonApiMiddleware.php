@@ -64,10 +64,10 @@ class JsonApiMiddleware
 		return $response;
 	}
 
-	// Private method
-	// check: if($header) === "application/vnd.api+json"
+	// PRIVATE
 	private function hasJsonApiContentType(string $header): bool
 	{
+		// check: if($header) === "application/vnd.api+json"
 		$contentTypes = explode(',', $header);
 		foreach ($contentTypes as $contentType) {
 			if (trim($contentType) === 'application/vnd.api+json') {
