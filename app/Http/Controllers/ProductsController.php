@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
 
-class ProductController extends Controller
+class ProductsController extends Controller
 {
 	// Return all products.
 	// IGNORE FOR NOW
 	public function index()
 	{
-		return 'All products';
+		return Product::all();
 	}
 
 	// Store new product in DB.
