@@ -14,14 +14,14 @@ return new class extends Migration {
 			$table->id();
 
 			$table->string('name');
-			$table->string('image_url')->nullable();
+			$table->string('image_url', 2048)->nullable(); // VARCHAR(2048) | maximum length for URLs | default: VARCHAR(255)
 			$table->string('brand');
 			$table->string('category');
 			$table->longText('description')->nullable();
 			$table->unsignedInteger('stock_quantity')->default(0);
 			$table->decimal('price', 8, 2)->unsigned();
-			$table->decimal('rating', 2, 1)->unsigned()->default(0);
-			$table->unsignedInteger('reviews_count')->default(0);
+			// $table->decimal('rating', 2, 1)->unsigned()->default(0); // LATER
+			// $table->unsignedInteger('reviews_count')->default(0); // LATER
 
 			$table->timestamps();
 		});
