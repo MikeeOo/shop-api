@@ -13,6 +13,7 @@ return new class extends Migration {
 		Schema::create('products', function (Blueprint $table) {
 			$table->id();
 
+			$table->string('sku')->unique(); // Stock Keeping Unit | format: {BRAND}-{CATEGORY}-{SEQUENCE}
 			$table->string('name');
 			$table->string('image_url', 2048)->nullable(); // VARCHAR(2048) | maximum length for URLs | default: VARCHAR(255)
 			$table->string('brand');
@@ -23,6 +24,7 @@ return new class extends Migration {
 			// $table->decimal('rating', 2, 1)->unsigned()->default(0); // LATER
 			// $table->unsignedInteger('reviews_count')->default(0); // LATER
 
+			$table->unique(['name', 'brand']); // name and brand together must be unique | additional constraint
 			$table->timestamps();
 		});
 	}
