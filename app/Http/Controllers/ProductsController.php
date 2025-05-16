@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
+use App\Http\Requests\StoreProductRequest;
 
 class ProductsController extends Controller
 {
@@ -16,14 +17,17 @@ class ProductsController extends Controller
 	}
 
 	// Store new product in DB.
-	public function store(Request $request)
+	public function store(StoreProductRequest $request)
 	{
-		return 'Create new product';
+		$validated = $request->validated();
+
+		$product = Product::create($validated);
+
+		return new ProductResource($product);
 	}
 
-	// Return single product.
-	// ISSUE: Product $product is not found - returns 404 error-web-page.
-	public function show(Product $product)
+	// Return single product via route model binding.
+	public function show(Product $product): ProductResource
 	{
 		return new ProductResource($product);
 	}
@@ -37,6 +41,8 @@ class ProductsController extends Controller
 	// Destroy specified product.
 	public function destroy(Product $product)
 	{
-		return 'Destroy product';
+		$product->delete();
+
+		return response()->noContent();
 	}
 }
