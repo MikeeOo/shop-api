@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 class ProductsController extends Controller
 {
 	// Return all products.
-	// IGNORE FOR NOW
 	public function index()
 	{
 		return Product::all();
@@ -33,9 +33,13 @@ class ProductsController extends Controller
 	}
 
 	// Update product in DB.
-	public function update(Request $request, Product $product)
+	public function update(UpdateProductRequest $request, Product $product)
 	{
-		return 'Update product';
+		$validated = $request->validated();
+
+		$product->update($validated);
+
+		return new ProductResource($product);
 	}
 
 	// Destroy specified product.
