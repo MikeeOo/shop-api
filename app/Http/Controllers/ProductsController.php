@@ -8,7 +8,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductCollection;
 use Illuminate\Http\Response;
-
+use Illuminate\Http\JsonResponse;
 class ProductsController extends Controller
 {
 	public function index(): ProductCollection
@@ -17,7 +17,7 @@ class ProductsController extends Controller
 		return new ProductCollection($products);
 	}
 
-	public function store(StoreProductRequest $request)
+	public function store(StoreProductRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
 
@@ -31,7 +31,7 @@ class ProductsController extends Controller
 		return new ProductResource($product);
 	}
 
-	public function update(UpdateProductRequest $request, Product $product)
+	public function update(UpdateProductRequest $request, Product $product): ProductResource
 	{
 		$validated = $request->validated();
 
@@ -39,10 +39,11 @@ class ProductsController extends Controller
 
 		return new ProductResource($product);
 	}
-	public function destroy(Product $product)
+
+	public function destroy(Product $product): JsonResponse
 	{
 		$product->delete();
 
-		return response()->noContent();
+		return response()->json(null, Response::HTTP_NO_CONTENT);
 	}
 }
