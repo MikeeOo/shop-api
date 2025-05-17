@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-// class ProductResource extends BaseResource
 class ProductResource extends JsonResource
 {
 	// Resource -> JSON<array>
@@ -23,12 +22,10 @@ class ProductResource extends JsonResource
 				'description' => $this->description,
 				'stock_quantity' => $this->stock_quantity,
 				'price' => $this->price,
-				'rating' => $this->rating,
-				'reviews_count' => $this->reviews_count,
-				'created_at' => $this->created_at,
-				'updated_at' => $this->updated_at,
-				// 'created_at' => $this->created_at->toIso8601String(),
-				// 'updated_at' => $this->updated_at->toIso8601String(),
+				// 'rating' => $this->rating,
+				// 'reviews_count' => $this->reviews_count,
+				'created_at' => $this->created_at->toIso8601String(), // recommended format in JSON:API specification
+				'updated_at' => $this->updated_at->toIso8601String(),
 			],
 			'relationships' => [],
 			'links' => [
@@ -38,7 +35,8 @@ class ProductResource extends JsonResource
 		];
 		// ]);
 	}
-	// adds "meta" outside of "data"
+
+	// Lets you "add" and "modify" JSON:API compliant metadata outside of "data" key.
 	public function with($request)
 	{
 		return [
