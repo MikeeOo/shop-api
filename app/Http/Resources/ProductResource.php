@@ -10,17 +10,16 @@ class ProductResource extends JsonResource
 	// Resource -> JSON<array>
 	public function toArray(Request $request): array
 	{
-		// return $this->camelizeKeys([
 		return [
 			'type' => 'products',
 			'id' => (string) $this->id,
 			'attributes' => [
 				'name' => $this->name,
-				'image_url' => $this->image_url,
-				'brand' => $this->brand,
-				'category' => $this->category,
+				// 'image_url' => $this->image_url,
+				// 'brand' => $this->brand,
+				// 'category' => $this->category,
 				'description' => $this->description,
-				'stock_quantity' => $this->stock_quantity,
+				// 'stock_quantity' => $this->stock_quantity,
 				'price' => $this->price,
 				// 'rating' => $this->rating,
 				// 'reviews_count' => $this->reviews_count,
@@ -33,7 +32,6 @@ class ProductResource extends JsonResource
 				// 'self' => route('products.show', $this->id),
 			],
 		];
-		// ]);
 	}
 
 	// Lets you "add" and "modify" JSON:API compliant metadata outside of "data" key.
