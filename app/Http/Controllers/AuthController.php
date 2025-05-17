@@ -41,7 +41,7 @@ class AuthController extends Controller
 	{
 		$credentials = $request->validated();
 
-		// attempt === failed
+		// if attempt === failed
 		if (!Auth::attempt($credentials)) {
 			throw ValidationException::withMessages([
 				'email' => ['The provided credentials are incorrect.'],
@@ -70,6 +70,6 @@ class AuthController extends Controller
 			'message' => 'Successfully logged out',
 		]);
 		// 204 No Content
-		//		return $this->success(null, 'User logged out successfully', 200);
+		// return $this->success(null, 'User logged out successfully', 200);
 	}
 }
