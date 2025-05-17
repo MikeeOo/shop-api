@@ -11,14 +11,12 @@ use Illuminate\Http\Response;
 
 class ProductsController extends Controller
 {
-	// Return all products.
 	public function index(): ProductCollection
 	{
 		$products = Product::paginate(10);
 		return new ProductCollection($products);
 	}
 
-	// Store new product in DB.
 	public function store(StoreProductRequest $request)
 	{
 		$validated = $request->validated();
@@ -28,13 +26,11 @@ class ProductsController extends Controller
 		return (new ProductResource($product))->response()->setStatusCode(Response::HTTP_CREATED);
 	}
 
-	// Return single product via route model binding.
 	public function show(Product $product): ProductResource
 	{
 		return new ProductResource($product);
 	}
 
-	// Update product in DB.
 	public function update(UpdateProductRequest $request, Product $product)
 	{
 		$validated = $request->validated();
@@ -43,8 +39,6 @@ class ProductsController extends Controller
 
 		return new ProductResource($product);
 	}
-
-	// Destroy specified product.
 	public function destroy(Product $product)
 	{
 		$product->delete();
