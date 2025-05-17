@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Product;
 use App\Http\Controllers\ProductsController;
 
 // "app/Providers/RouteServiceProvider.php"
