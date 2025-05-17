@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductCollection;
+use Illuminate\Http\Response;
 
 class ProductsController extends Controller
 {
 	// Return all products.
-	public function index()
+	public function index(): ProductCollection
 	{
-		return Product::all();
+		$products = Product::paginate(10);
+		return new ProductCollection($products);
 	}
 
 	// Store new product in DB.
@@ -23,7 +25,7 @@ class ProductsController extends Controller
 
 		$product = Product::create($validated);
 
-		return new ProductResource($product);
+		return (new ProductResource($product))->response()->setStatusCode(Response::HTTP_CREATED);
 	}
 
 	// Return single product via route model binding.
