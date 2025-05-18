@@ -2,12 +2,15 @@
 
 namespace App\Exceptions;
 
+use App\Traits\HttpResponses;
+
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 // use Throwable;
 
 class Handler extends ExceptionHandler
 {
+	use HttpResponses;
 	/**
 	 * The list of the inputs that are never flashed to the session on validation exceptions.
 	 *
@@ -24,12 +27,7 @@ class Handler extends ExceptionHandler
 		$this->renderable(function (NotFoundHttpException $e, $request) {
 			// alternative: $request->wantsJson()
 			if ($request->is('api/*')) {
-				return response()->json(
-					[
-						'message' => 'Object not found',
-					],
-					404
-				);
+				return $this->notFound('Object Not Found');
 			}
 		});
 	}
