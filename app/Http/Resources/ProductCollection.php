@@ -15,7 +15,7 @@ class ProductCollection extends ResourceCollection
 		];
 	}
 
-	// Additional JSON:API compliant metadata
+	// Additional JSON:API compliant metadata.
 	public function with($request)
 	{
 		return [
