@@ -1,37 +1,38 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\UsersController;
 
-// "app/Providers/RouteServiceProvider.php"
-// Route::middleware('api')->prefix('api')->group(base_path('routes/api.php'));
-//
-// "/controller/model" - for route->model binding
-//
-// Auth::routes([
-//     'login' => true,
-//     'logout' => true,
-//     'register' => true,
-//     'reset' => true,
-//     'confirm' => false,
-//     'verify' => false,    // Enable email verification routes
-// ]);
+// API ROUTES
 
-// api test route
-Route::get('/', function () {
-	return response()->json([
-		'message' => 'API works!',
-	]);
+// PUBLIC ROUTES
+Route::get('/', fn() => response()->json(['jsonapi' => ['version' => '1.0']])); // TODO: create documentation
+Route::get('/products', [ProductsController::class, 'index']);
+
+Route::prefix('auth')->group(function () {
+	Route::post('/register', [AuthController::class, 'register']);
+	Route::post('/login', [AuthController::class, 'login']);
 });
 
-// Product routes
-Route::get('/products', [ProductsController::class, 'index']);
-Route::post('/products', [ProductsController::class, 'store']);
-Route::get('/products/{product}', [ProductsController::class, 'show']);
-Route::put('/products/{product}', [ProductsController::class, 'update']);
-Route::delete('/products/{product}', [ProductsController::class, 'destroy']);
+// PROTECTED ROUTES
+Route::middleware('auth:sanctum')->group(function () {
+	Route::post('/auth/logout', [AuthController::class, 'logout']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-	return $request->user();
+	Route::prefix('users')->group(function () {
+		Route::get('/', [UsersController::class, 'index']);
+		Route::post('/', [UsersController::class, 'store']);
+		Route::get('/{user}', [UsersController::class, 'show']);
+		Route::put('/{user}', [UsersController::class, 'update']);
+		Route::delete('/{user}', [UsersController::class, 'destroy']);
+	});
+
+	Route::prefix('products')->group(function () {
+		Route::post('/', [ProductsController::class, 'store']);
+		Route::get('/{product}', [ProductsController::class, 'show']);
+		Route::put('/{product}', [ProductsController::class, 'update']);
+		Route::delete('/{product}', [ProductsController::class, 'destroy']);
+	});
 });
