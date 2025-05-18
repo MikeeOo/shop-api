@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductCollection;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Resources\ProductCollection;
-use Illuminate\Http\Response;
+
 use Illuminate\Http\JsonResponse;
+
 class ProductsController extends Controller
 {
-	public function index(): ProductCollection
+	public function index(): JsonResponse
 	{
 		$products = Product::paginate(10);
-		return new ProductCollection($products);
+
+		return $this->ok(new ProductCollection($products)); // 200
 	}
 
 	public function store(StoreProductRequest $request): JsonResponse
@@ -23,27 +25,27 @@ class ProductsController extends Controller
 
 		$product = Product::create($validated);
 
-		return (new ProductResource($product))->response()->setStatusCode(Response::HTTP_CREATED);
+		return $this->created(new ProductResource($product)); // 201
 	}
 
-	public function show(Product $product): ProductResource
+	public function show(Product $product): JsonResponse
 	{
-		return new ProductResource($product);
+		return $this->ok(new ProductResource($product)); // 200
 	}
 
-	public function update(UpdateProductRequest $request, Product $product): ProductResource
+	public function update(UpdateProductRequest $request, Product $product): JsonResponse
 	{
 		$validated = $request->validated();
 
 		$product->update($validated);
 
-		return new ProductResource($product);
+		return $this->ok(new ProductResource($product)); // 200
 	}
 
 	public function destroy(Product $product): JsonResponse
 	{
 		$product->delete();
 
-		return response()->json(null, Response::HTTP_NO_CONTENT);
+		return $this->noContent(); // 204
 	}
 }
