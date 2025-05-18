@@ -1,20 +1,23 @@
 <?php
-// const HTTP_CREATED = 201;
+
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+use App\Models\User;
+use App\Http\Resources\UserResource;
+
+use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-	// 	use HttpResponses;
-
-	public function register(RegisterRequest $request)
+	public function register(RegisterRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
 
@@ -22,54 +25,37 @@ class AuthController extends Controller
 			'first_name' => $validated['first_name'],
 			'last_name' => $validated['last_name'],
 			'email' => $validated['email'],
-			'password' => bcrypt($validated['password']),
+			// password is auto-hashed, you hash it for additional security and clarity
+			'password' => Hash::make($validated['password']), // bcrypt wrapper = better for future
 		]);
 
 		$token = $user->createToken('auth_token')->plainTextToken;
 
-		return response()->json(
-			[
-				'user' => $user,
-				'token' => $token,
-			],
-			Response::HTTP_CREATED
-		);
-		// return $this->success([]);
+		return $this->created(new UserResource($user, $token)); // 201
 	}
 
-	public function login(LoginRequest $request)
+	public function login(LoginRequest $request): JsonResponse
 	{
 		$credentials = $request->validated();
 
-		// if attempt === failed
+		// if (error)
 		if (!Auth::attempt($credentials)) {
 			throw ValidationException::withMessages([
 				'email' => ['The provided credentials are incorrect.'],
 			]);
-			// return $this->error('', 'Credentials do not match', 401);
-			// return $this->error('', 'Provided email or password is incorrect', 422);
-			// return $this->error('', 'Invalid credentials', 401);
 		}
 
-		// $user = Auth::user();
 		$user = User::where('email', $credentials['email'])->first();
+
 		$token = $user->createToken('auth_token')->plainTextToken;
 
-		return response()->json([
-			'user' => $user,
-			'token' => $token,
-		]);
+		return $this->ok(new UserResource($user, $token)); // 200
 	}
 
-	public function logout(Request $request)
+	public function logout(Request $request): JsonResponse
 	{
-		// Revoke the token that was used to authenticate the current request
-		$request->user()->currentAccessToken()->delete();
+		$request->user()->currentAccessToken()->delete(); // Revoke the token used to authenticate CURRENT REQUEST
 
-		return response()->json([
-			'message' => 'Successfully logged out',
-		]);
-		// 204 No Content
-		// return $this->success(null, 'User logged out successfully', 200);
+		return $this->noContent(); // 204
 	}
 }
