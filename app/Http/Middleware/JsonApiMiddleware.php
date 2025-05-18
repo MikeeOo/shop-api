@@ -2,12 +2,16 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\HttpResponses;
+
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class JsonApiMiddleware
 {
+	use HttpResponses;
+
 	// Handle an incoming request.
 	public function handle(Request $request, Closure $next): Response
 	{
@@ -16,19 +20,7 @@ class JsonApiMiddleware
 			!$request->hasHeader('Accept') ||
 			!$this->hasJsonApiContentType($request->header('Accept'))
 		) {
-			// TODO: implement trait for this
-			return response()->json(
-				[
-					'errors' => [
-						[
-							'status' => '406',
-							'title' => 'Not Acceptable',
-							'detail' => 'API requires Accept header with application/vnd.api+json',
-						],
-					],
-				],
-				406
-			);
+			return $this->notAcceptable('API requires Accept header with application/vnd.api+json'); // 406
 		}
 
 		// Check Content-Type header for requests with content
@@ -41,20 +33,9 @@ class JsonApiMiddleware
 				!$request->hasHeader('Content-Type') ||
 				!$this->hasJsonApiContentType($request->header('Content-Type'))
 			) {
-				// TODO: implement trait for this
-				return response()->json(
-					[
-						'errors' => [
-							[
-								'status' => '415',
-								'title' => 'Unsupported Media Type',
-								'detail' =>
-									'API requires Content-Type header with application/vnd.api+json',
-							],
-						],
-					],
-					415
-				);
+				return $this->unsupportedMediaType(
+					'API requires Content-Type header with application/vnd.api+json'
+				); // 415
 			}
 		}
 		// Configure response
