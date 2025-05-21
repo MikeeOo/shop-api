@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use App\Constants\JsonApiConstants as API;
+use App\Constants\ErrorConstants as ERROR;
+
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -38,7 +41,7 @@ trait HttpResponses
 
 	// 500 | ERROR RESPONSE | Internal Server Error
 	protected function error(
-		string $title = 'Internal Server Error',
+		string $title = ERROR::INTERNAL_SERVER,
 		string $detail = '',
 		int $code = Response::HTTP_INTERNAL_SERVER_ERROR
 	): JsonResponse {
@@ -47,13 +50,13 @@ trait HttpResponses
 				'errors' => [
 					[
 						'status' => (string) $code,
-						'source' => ['pointer' => '$pointer'],
+						// 'source' => ['pointer' => '$pointer'], // pointers are for validation errors
 						'title' => $title,
 						'detail' => $detail,
 					],
 				],
 				'jsonapi' => [
-					'version' => '1.0',
+					'version' => API::VERSION,
 				],
 			],
 			$code
@@ -63,32 +66,32 @@ trait HttpResponses
 	// 401 | Unauthorized
 	protected function unauthorized(string $detail = ''): JsonResponse
 	{
-		return $this->error('Unauthorized', $detail, Response::HTTP_UNAUTHORIZED);
+		return $this->error(ERROR::UNAUTHORIZED, $detail, Response::HTTP_UNAUTHORIZED);
 	}
 
 	// 403 | Forbidden
 	protected function forbidden(string $detail = ''): JsonResponse
 	{
-		return $this->error('Forbidden', $detail, Response::HTTP_FORBIDDEN);
+		return $this->error(ERROR::FORBIDDEN, $detail, Response::HTTP_FORBIDDEN);
 	}
 
 	// 404 | Not Found
 	protected function notFound(string $detail = ''): JsonResponse
 	{
-		return $this->error('Not Found', $detail, Response::HTTP_NOT_FOUND);
+		return $this->error(ERROR::NOT_FOUND, $detail, Response::HTTP_NOT_FOUND);
 	}
 
 	// 406 | Not Acceptable
 	protected function notAcceptable(string $detail = ''): JsonResponse
 	{
-		return $this->error('Not Acceptable', $detail, Response::HTTP_NOT_ACCEPTABLE);
+		return $this->error(ERROR::NOT_ACCEPTABLE, $detail, Response::HTTP_NOT_ACCEPTABLE);
 	}
 
 	// 415 | Unsupported Media Type
 	protected function unsupportedMediaType(string $detail = ''): JsonResponse
 	{
 		return $this->error(
-			'Unsupported Media Type',
+			ERROR::UNSUPPORTED_MEDIA_TYPE,
 			$detail,
 			Response::HTTP_UNSUPPORTED_MEDIA_TYPE
 		);
