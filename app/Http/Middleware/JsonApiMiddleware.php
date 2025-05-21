@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Traits\HttpResponses;
+use App\Constants\JsonApiConstants as API;
+use App\Constants\HttpMethodConstants as HTTP;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -17,41 +19,43 @@ class JsonApiMiddleware
 	{
 		// Check Accept header for all requests
 		if (
-			!$request->hasHeader('Accept') ||
-			!$this->hasJsonApiContentType($request->header('Accept'))
+			!$request->hasHeader(API::ACCEPT) ||
+			!$this->hasJsonApiMediaType($request->header(API::ACCEPT))
 		) {
-			return $this->notAcceptable('API requires Accept header with application/vnd.api+json'); // 406
+			return $this->notAcceptable(
+				'API requires ' . API::ACCEPT . ' header with ' . API::MEDIA_TYPE
+			); // 406
 		}
 
 		// Check Content-Type header for requests with content
 		if (
-			$request->isMethod('POST') ||
-			$request->isMethod('PATCH') ||
-			$request->isMethod('PUT')
+			$request->isMethod(HTTP::POST) ||
+			$request->isMethod(HTTP::PATCH) ||
+			$request->isMethod(HTTP::PUT)
 		) {
 			if (
-				!$request->hasHeader('Content-Type') ||
-				!$this->hasJsonApiContentType($request->header('Content-Type'))
+				!$request->hasHeader(API::CONTENT_TYPE) ||
+				!$this->hasJsonApiMediaType($request->header(API::CONTENT_TYPE))
 			) {
 				return $this->unsupportedMediaType(
-					'API requires Content-Type header with application/vnd.api+json'
+					'API requires ' . API::CONTENT_TYPE . ' header with ' . API::MEDIA_TYPE
 				); // 415
 			}
 		}
 		// Configure response
 		$response = $next($request);
-		$response->headers->set('Content-Type', 'application/vnd.api+json');
+		$response->headers->set(API::CONTENT_TYPE, API::MEDIA_TYPE);
 
 		return $response;
 	}
 
 	// PRIVATE
-	private function hasJsonApiContentType(string $header): bool
+	private function hasJsonApiMediaType(string $header): bool
 	{
-		// check: if($header) === "application/vnd.api+json"
+		// if($header) === "application/vnd.api+json"
 		$contentTypes = explode(',', $header);
 		foreach ($contentTypes as $contentType) {
-			if (trim($contentType) === 'application/vnd.api+json') {
+			if (trim($contentType) === API::MEDIA_TYPE) {
 				return true;
 			}
 		}
