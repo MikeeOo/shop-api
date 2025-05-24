@@ -14,7 +14,7 @@ class ProductsController extends Controller
 {
 	public function index(): JsonResponse
 	{
-		$products = Product::paginate(10);
+		$products = Product::paginate(2);
 
 		return $this->ok(new ProductCollection($products)); // 200
 	}
