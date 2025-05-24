@@ -96,6 +96,16 @@ trait HttpResponses
 			Response::HTTP_UNSUPPORTED_MEDIA_TYPE
 		);
 	}
+
+	// 503 | Service Temporarily Unavailable
+	protected function serviceUnavailable(string $detail = ''): JsonResponse
+	{
+		return $this->error(
+			ERROR::SERVICE_UNAVAILABLE,
+			$detail,
+			Response::HTTP_SERVICE_UNAVAILABLE
+		);
+	}
 }
 
 // protected function handleException(
