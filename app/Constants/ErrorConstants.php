@@ -10,4 +10,5 @@ class ErrorConstants
 	public const NOT_FOUND = 'Not Found';
 	public const NOT_ACCEPTABLE = 'Not Acceptable';
 	public const UNSUPPORTED_MEDIA_TYPE = 'Unsupported Media Type';
+	public const SERVICE_UNAVAILABLE = 'Service Temporarily Unavailable';
 }
