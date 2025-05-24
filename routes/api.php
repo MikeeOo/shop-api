@@ -8,21 +8,25 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UsersController;
 
-// API ROUTES
-
-// PUBLIC ROUTES
+// PUBLIC API ROUTES
+// PUBLIC
+// "/api"
 Route::get('/', fn() => response()->json(['jsonapi' => ['version' => API::VERSION]])); // TODO: create documentation
-Route::get('/products', [ProductsController::class, ACTION::INDEX]);
-
+// "/api/products/{product}"
+Route::prefix('products')->group(function () {
+	Route::get('/', [ProductsController::class, ACTION::INDEX]);
+	Route::get('/{product}', [ProductsController::class, ACTION::SHOW]);
+});
+// "/api/auth/{action}"
 Route::prefix('auth')->group(function () {
 	Route::post('/register', [AuthController::class, 'register']);
 	Route::post('/login', [AuthController::class, 'login']);
 });
-
-// PROTECTED ROUTES
+// PRIVATE API ROUTES
+// PROTECTED Authentication:Sanctum
 Route::middleware('auth:sanctum')->group(function () {
 	Route::post('/auth/logout', [AuthController::class, 'logout']);
-
+	// "/api/users/{user}"
 	Route::prefix('users')->group(function () {
 		Route::get('/', [UsersController::class, ACTION::INDEX]);
 		Route::post('/', [UsersController::class, ACTION::STORE]);
@@ -30,10 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::put('/{user}', [UsersController::class, ACTION::UPDATE]);
 		Route::delete('/{user}', [UsersController::class, ACTION::DESTROY]);
 	});
-
+	// "/api/products/{product}"
 	Route::prefix('products')->group(function () {
 		Route::post('/', [ProductsController::class, ACTION::STORE]);
-		Route::get('/{product}', [ProductsController::class, ACTION::SHOW]);
 		Route::put('/{product}', [ProductsController::class, ACTION::UPDATE]);
 		Route::delete('/{product}', [ProductsController::class, ACTION::DESTROY]);
 	});
