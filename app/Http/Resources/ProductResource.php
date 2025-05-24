@@ -43,11 +43,11 @@ class ProductResource extends JsonResource
 				'self' => url('/products/' . $this->id), // change to route name later...
 				// 'self' => route('products.show', $this->id),
 			],
-			'meta' => [
-				'author' => 'MikeeOo',
-				'version' => '1.0.0',
-				'snake_case_test' => 'John Doe',
-			],
+			// 'meta' => [
+			// 	'author' => 'MikeeOo',
+			// 	'version' => '1.0.0',
+			// 	'snake_case_test' => 'John Doe',
+			// ],
 		];
 	}
 }

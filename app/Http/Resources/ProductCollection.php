@@ -22,15 +22,15 @@ class ProductCollection extends ResourceCollection
 			'links' => [
 				'self' => url()->current(),
 			],
-			'meta' => [
-				'author' => 'MikeeOo',
-				'version' => '1.0.0',
-				'snake_case_test' => 'John Doe',
-			],
-			'jsonapi' => [
-				'version' => '1.0',
-			],
-			'included' => [],
+			// 'meta' => [
+			// 	'author' => 'MikeeOo',
+			// 	'version' => '1.0.0',
+			// 	'snake_case_test' => 'John Doe',
+			// ],
+			// 'jsonapi' => [
+			// 	'version' => '1.0',
+			// ],
+			// 'included' => [],
 		];
 	}
 }
