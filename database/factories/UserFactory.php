@@ -16,22 +16,47 @@ class UserFactory extends Factory
 	 */
 	protected static ?string $password;
 
-	/**
-	 * Define the model's default state.
-	 *
-	 * @return array<string, mixed>
-	 */
+	// define the model's default state.
 	public function definition(): array
 	{
 		return [
-			'name' => fake()->name(),
+			'first_name' => fake()->firstName(),
+			'last_name' => fake()->lastName(),
 			'email' => fake()->unique()->safeEmail(),
 			'email_verified_at' => now(),
 			'password' => (static::$password ??= Hash::make('password')),
+			'is_admin' => false,
 			'remember_token' => Str::random(10),
 		];
 	}
 
+	// create an admin user
+	public function admin(): static
+	{
+		return $this->state(
+			fn(array $attributes) => [
+				'first_name' => 'John',
+				'last_name' => 'Doe',
+				'email' => 'a@a.com',
+				'password' => Hash::make('JohnDoea@a.com123'),
+				'is_admin' => true,
+			]
+		);
+	}
+
+	// create a regular user w/custom credentials
+	public function user(): static
+	{
+		return $this->state(
+			fn(array $attributes) => [
+				'first_name' => 'Jane',
+				'last_name' => 'Doe',
+				'email' => 'b@b.com',
+				'password' => Hash::make('JaneDoeb@b.com123'),
+				'is_admin' => false,
+			]
+		);
+	}
 	/**
 	 * Indicate that the model's email address should be unverified.
 	 */
